@@ -1,23 +1,16 @@
 package motion;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import motion.Terrain.TerrainType;
-import nPuzzle.NPuzzleState;
-import nPuzzle.NPuzzleState.NPuzzleOperator;
 import static java.lang.Math.*;
 import searchproblem.*;
-import vacuumworld.VacuumState;
 
 
 public class RoverState extends State {
 	
-	public enum RoverOperator {
-		W, E, N, S, NW, NE, SW, SE;
-	}
-	
+	public enum RoverOperator { W, E, N, S, NW, NE, SW, SE; }
 	
 	BitmapTerrain terrain;
 	private int xPos;
@@ -51,23 +44,22 @@ public class RoverState extends State {
 		
 		RoverOperator op = (RoverOperator) action;
 		switch (op) {
-		
-		case W: 		
-			return xPos > 0;
-		case E:
-			return xPos < terrain.getHorizontalSize()-1;
-		case N:
-			return yPos > 0;
-		case S:
-			return yPos < terrain.getVerticalSize()-1;
-		case NW: 
-			return xPos > 0 && yPos > 0;
-		case NE:
-			return xPos < terrain.getHorizontalSize()-1 && yPos > 0;
-		case SW:
-			return xPos > 0 && yPos < terrain.getVerticalSize()-1;
-		case SE:
-			return xPos < terrain.getHorizontalSize()-1 && yPos < terrain.getVerticalSize()-1;
+			case W: 		
+				return xPos > 0;
+			case E:
+				return xPos < terrain.getHorizontalSize()-1;
+			case N:
+				return yPos > 0;
+			case S:
+				return yPos < terrain.getVerticalSize()-1;
+			case NW: 
+				return xPos > 0 && yPos > 0;
+			case NE:
+				return xPos < terrain.getHorizontalSize()-1 && yPos > 0;
+			case SW:
+				return xPos > 0 && yPos < terrain.getVerticalSize()-1;
+			case SE:
+				return xPos < terrain.getHorizontalSize()-1 && yPos < terrain.getVerticalSize()-1;
 		}
 		
 		return false;
@@ -83,38 +75,15 @@ public class RoverState extends State {
 		int oldX = xPos;
 		int oldY = yPos;
 		
-		double cost;
-		
 		switch (action) {
-		
-		case W: 
-			xPos--;
-			break;
-		case E:
-			xPos++;
-			break;
-		case N:
-			yPos--;
-			break;
-		case S:
-			yPos++;
-			break;
-		case NW: 
-			yPos--;
-			xPos--;
-			break;
-		case NE:
-			yPos--;
-			xPos++;
-			break;
-		case SW:
-			yPos++;
-			xPos--;
-			break;
-		case SE:
-			yPos++;
-			xPos++;
-			break;
+			case W: xPos--; break;
+			case E: xPos++; break;
+			case N: yPos--; break;
+			case S: yPos++; break;
+			case NW: yPos--; xPos--; break;
+			case NE: yPos--; xPos++; break;
+			case SW: yPos++; xPos--; break;
+			case SE: yPos++; xPos++; break;
 		}
 		
 		//retorna o custo de ir da posiçao antiga para a recente, com base no operador
@@ -123,7 +92,6 @@ public class RoverState extends State {
 	}
 	
 	private double calcCost(int oX, int oY, int nX, int nY) {
-		
 		
 		double h1 = terrain.getHeight(oX, oY); //altura da posiçao antiga
 		double h2 = terrain.getHeight(nX, nY); //altura da posiçao nova

@@ -12,7 +12,10 @@ import searchproblem.*;
 
 public class MotionTest extends Component {
 
-	static final String TERRAIN_PATH = "C:/Users/Joao/workspace/IA/bin/motion/th.png"; //mudem o path
+	private static final long serialVersionUID = 1L;
+	
+	static final String TERRAIN_PATH = System.getProperty("user.dir")
+			+"/src/motion/th.png";
 	static final int SURFACE_STEP=10;
 	static final boolean SURFACE_LEVELS=false;
 	static final boolean ANIMATE=true;
