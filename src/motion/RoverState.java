@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import motion.Terrain.TerrainType;
 import nPuzzle.NPuzzleState;
 import nPuzzle.NPuzzleState.NPuzzleOperator;
-
 import static java.lang.Math.*;
 import searchproblem.*;
 import vacuumworld.VacuumState;
@@ -79,6 +79,12 @@ public class RoverState extends State {
 		
 		RoverOperator action = (RoverOperator) op;
 		
+		//variaveis actuais que irao ser mudadas no final do metodo, de forma a se poder calcular o custo.
+		int oldX = xPos;
+		int oldY = yPos;
+		
+		double cost;
+		
 		switch (action) {
 		
 		case W: 
@@ -110,8 +116,26 @@ public class RoverState extends State {
 			xPos++;
 			break;
 		}
-			return 1.0;
 		
+		//retorna o custo de ir da posiçao antiga para a recente, com base no operador
+		return calcCost(oldX, oldY, xPos, yPos);
+		
+	}
+	
+	private double calcCost(int oX, int oY, int nX, int nY) {
+		
+		
+		double h1 = terrain.getHeight(oX, oY); //altura da posiçao antiga
+		double h2 = terrain.getHeight(nX, nY); //altura da posiçao nova
+		double d = sqrt(pow(oX-nX,2) + pow(oY-oY,2) + pow(h1-h2, 2)); //distancia euclidiana
+		int terrainType=1;
+		
+		if (terrain.getTerrainType(nX, nY).equals(TerrainType.SAND))
+			terrainType = 2;
+		else if (terrain.getTerrainType(nX, nY).equals(TerrainType.SAND))
+			terrainType = 3;
+		
+		return terrainType * d * pow(E, (h1-h2)/10);
 	}
 
 	@Override
