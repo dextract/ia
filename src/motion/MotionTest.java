@@ -12,7 +12,7 @@ import searchproblem.*;
 
 public class MotionTest extends Component {
 
-	static final String TERRAIN_PATH = "C:/Users/jfs.costa/workspace/IA/bin/th.png";
+	static final String TERRAIN_PATH = "C:/Users/Joao/workspace/IA/bin/motion/th.png"; //mudem o path
 	static final int SURFACE_STEP=10;
 	static final boolean SURFACE_LEVELS=false;
 	static final boolean ANIMATE=true;
@@ -85,8 +85,8 @@ public class MotionTest extends Component {
         // Avoids side-effects of writing in the image
 		t = new BitmapTerrain(TERRAIN_PATH);
 
-		RoverState init = new RoverState(0,0,t);
-		RoverState goal = new RoverState(150,150,t);
+		RoverState init = new RoverState(startx,starty,t);
+		RoverState goal = new RoverState(goalx,goaly,t);
 		
 
 		// Solves the problem using AStarSearch
