@@ -5,23 +5,26 @@ import searchalgorithm.Node;
 import searchproblem.*;
 
 public class RoverProblem extends InformedSearchProblem {
+	
+	RoverState goal;
 
 	public RoverProblem(State initial, RoverState goal) {
 		super(initial, goal);
+		
+		this.goal= goal;
 	}
 
 
 	@Override
 	public double heuristic(Node n) {
 		
-			
-		State s = n.getState();
-		int x = ((RoverState) s).getCoordX();
-		int y = ((RoverState) s).getCoordY();
+		State currentState = n.getState();
+		int x = ((RoverState) currentState).getCoordX();
+		int y = ((RoverState) currentState).getCoordY();
 		
 		AnimatedSearch.draw(x, y);
 		
-		return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) ; // distancia 2D
+		return  Math.sqrt(Math.pow(goal.getCoordX()- x, 2) + Math.pow(goal.getCoordY()- y, 2)) ;
 	}
 	
 
