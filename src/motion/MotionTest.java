@@ -12,13 +12,14 @@ import searchproblem.*;
 
 public class MotionTest extends Component {
 
-	static final String TERRAIN_PATH = "/Users/carlosdamasio/Documents/workspace/ia/src/motion/th.png";
+	static final String TERRAIN_PATH = "C:/Users/jfs.costa/workspace/IA/bin/th.png";
 	static final int SURFACE_STEP=10;
 	static final boolean SURFACE_LEVELS=false;
-	static final boolean ANIMATE=false;
+	static final boolean ANIMATE=true;
 	
     static BufferedImage img;
     static int startx, starty, goalx,goaly;
+    
     
     public void paint(Graphics g) {
         g.drawImage(img, 0, 0, null);
@@ -84,13 +85,15 @@ public class MotionTest extends Component {
         // Avoids side-effects of writing in the image
 		t = new BitmapTerrain(TERRAIN_PATH);
 
-		RoverState init = new RoverState(startx,starty,t);
-		RoverState goal = new RoverState(goalx,goaly,t);
+		RoverState init = new RoverState(0,0,t);
+		RoverState goal = new RoverState(150,150,t);
+		
 
 		// Solves the problem using AStarSearch
 		InformedSearchProblem prob = new RoverProblem(init,goal);
 		SearchAlgorithm u = new AStarSearch(prob);
-
+		
+		
 		// Determines the solution and writes the metrics
 		Node n = u.searchSolution();
 		System.out.println(u.getMetrics());
