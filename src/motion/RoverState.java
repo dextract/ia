@@ -132,7 +132,7 @@ public class RoverState extends State {
 		
 		if (terrain.getTerrainType(nX, nY).equals(TerrainType.SAND))
 			terrainType = 2;
-		else if (terrain.getTerrainType(nX, nY).equals(TerrainType.SAND))
+		else if (terrain.getTerrainType(nX, nY).equals(TerrainType.ROCK))
 			terrainType = 3;
 		
 		return terrainType * d * pow(E, (h1-h2)/10);
