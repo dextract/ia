@@ -21,7 +21,7 @@ public class RoverProblem extends InformedSearchProblem {
 		
 		AnimatedSearch.draw(x, y);
 		
-		return 0; //Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) ;
+		return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) ; // distancia 2D
 	}
 	
 
