@@ -2,6 +2,7 @@ package motion;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import motion.Terrain.TerrainType;
 import static java.lang.Math.*;
@@ -95,15 +96,18 @@ public class RoverState extends State {
 		
 		double h1 = terrain.getHeight(oX, oY); //altura da posiçao antiga
 		double h2 = terrain.getHeight(nX, nY); //altura da posiçao nova
-		double d = sqrt(pow(oX-nX,2) + pow(oY-oY,2) + pow(h1-h2, 2)); //distancia euclidiana
+		double d = sqrt(pow(oX-nX,2) + pow(oY-nY,2) + pow(h1-h2, 2)); //distancia euclidiana
 		int terrainType=1;
-		
+	
 		if (terrain.getTerrainType(nX, nY).equals(TerrainType.SAND))
 			terrainType = 2;
 		else if (terrain.getTerrainType(nX, nY).equals(TerrainType.ROCK))
 			terrainType = 3;
-		
-		return terrainType * d * pow(E, (h1-h2)/10);
+		if(Math.abs(h2-h1)>10)
+			return 10000000;
+		else
+			return d * pow(E, (Math.sqrt(Math.abs(h2-h1))))*terrainType;
+			//return d*Math.exp((h2-h1)/10)*terrainType;
 	}
 
 	@Override
@@ -113,7 +117,11 @@ public class RoverState extends State {
 
 	@Override
 	public int hashCode() {
-		return xPos^yPos;
+		//return xPos ^ yPos;
+		final int PRIME = 31;
+		int result = 1;
+		result = PRIME * result + terrain.hashCode() + xPos + yPos;
+		return result;
 	}
 	
 

@@ -18,7 +18,7 @@ public class MotionTest extends Component {
 			+"/src/motion/th.png";
 	static final int SURFACE_STEP=10;
 	static final boolean SURFACE_LEVELS=false;
-	static final boolean ANIMATE=true;
+	static final boolean ANIMATE=false;
 	
     static BufferedImage img;
     static int startx, starty, goalx,goaly;
@@ -91,19 +91,24 @@ public class MotionTest extends Component {
 		RoverState init = new RoverState(startx,starty,t);
 		RoverState goal = new RoverState(goalx,goaly,t);
 		
-
+		double iTime = System.currentTimeMillis();
+		
 		// Solves the problem using AStarSearch
-		InformedSearchProblem prob = new RoverProblem(init,goal);
+		InformedSearchProblem prob = new RoverProblem(init,goal,t);
 		SearchAlgorithm u = new AStarSearch(prob);
 		
 		
 		// Determines the solution and writes the metrics
 		Node n = u.searchSolution();
+		
+		System.out.println((System.currentTimeMillis()-iTime)/1000);
+		
 		System.out.println(u.getMetrics());
+		
 		
 		// Draws the solution in the screen
 		if( n != null) {
-			System.out.print( ((int) (n.getPathCost()*100)) + " ");
+			System.out.print( ((int) (n.getPathCost())) + " ");
 			System.out.println(n.getPath());
 			RoverState current = (RoverState) init.clone();
 			img.setRGB(current.getCoordX(), current.getCoordY(), 0xFF << 16);

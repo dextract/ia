@@ -33,7 +33,7 @@ public class GraphSearch implements SearchAlgorithm {
 		return goal;
 	}
 
-	private Node search() {		
+	private Node search() {	
 		frontier.clear();
 		frontier.add(new Node(problem.getInitial()));
 		for(;;) {
