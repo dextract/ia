@@ -92,10 +92,10 @@ public class RoverState extends State {
 	}
 	
 	private double calcCost(int oX, int oY, int nX, int nY) {
-		
+			
 		double h1 = terrain.getHeight(oX, oY); //altura da posiçao antiga
 		double h2 = terrain.getHeight(nX, nY); //altura da posiçao nova
-		double d = sqrt(pow(oX-nX,2) + pow(oY-oY,2) + pow(h1-h2, 2)); //distancia euclidiana
+		double d = sqrt(pow(oX-nX,2) + pow(oY-nY,2) + pow(h1-h2, 2)); //distancia euclidiana
 		int terrainType=1;
 		
 		if (terrain.getTerrainType(nX, nY).equals(TerrainType.SAND))
@@ -103,7 +103,7 @@ public class RoverState extends State {
 		else if (terrain.getTerrainType(nX, nY).equals(TerrainType.ROCK))
 			terrainType = 3;
 		
-		return terrainType * d * pow(E, (h1-h2)/10);
+		return terrainType * d * pow(E, sqrt(abs(h1-h2)));	
 	}
 
 	@Override
