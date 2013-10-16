@@ -103,11 +103,19 @@ public class RoverState extends State {
 			terrainType = 2;
 		else if (terrain.getTerrainType(nX, nY).equals(TerrainType.ROCK))
 			terrainType = 3;
-		
+<<<<<<< HEAD
+		if(Math.abs(h2-h1)>10)
+			return 10000000;
+		else
+			return d * pow(E, (Math.sqrt(Math.abs(h2-h1))))*terrainType;
+			//return d*Math.exp((h2-h1)/10)*terrainType;
+=======
+			
 		if(abs(h1-h2) > 10)
 			return 10000000;	
 		
 		return terrainType * d * pow(E, sqrt(abs(h1-h2)));	
+>>>>>>> 2e2ea81be3d54e522557fab00d51f82c612aa7ba
 	}
 
 	@Override
