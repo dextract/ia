@@ -10,12 +10,12 @@ import circuit.ObservationData.*;
 public class RoverCircuit extends Individual {
 	
 	
-	//constantes para definir opÁoes de crossover
+	//constantes para definir op√ßoes de crossover
 	public final static int OPTION_OX1 = 0;
 	public final static int OPTION_OX2 = 1;
 	public final static int OPTION_PMX = 2;
 	public final static int OPTION_CX = 3;
-	//constantes para definir opÁoes de mutaÁao
+	//constantes para definir op√ßoes de muta√ßao
 	public final static int OPTION_REVERSE = 0;
 	public final static int OPTION_INSERT = 1;
 	public final static int OPTION_DISPLACEMENT = 2;
@@ -23,18 +23,18 @@ public class RoverCircuit extends Individual {
 	
 	
 	private List<Integer> spots; //indices relativos aos pontos a serem visitados 
-	private ObservationData data; //informaÁao relativa aos pontos que serao visitados
-	private int nChildren = 2; //por defeito, cada crossover d· origem a 2 filhos
+	private ObservationData data; //informa√ßao relativa aos pontos que serao visitados
+	private int nChildren = 2; //por defeito, cada crossover d√° origem a 2 filhos
 	
-	Individual[] children = new Individual[nChildren]; //vector representante dos filhos, a ser utilizado nas funÁoes de crossover
-	RoverCircuit secondParent; //objecto rovercircuit, a ser utilizado nas funÁoes de crossover
+	Individual[] children = new Individual[nChildren]; //vector representante dos filhos, a ser utilizado nas fun√ßoes de crossover
+	RoverCircuit secondParent; //objecto rovercircuit, a ser utilizado nas fun√ßoes de crossover
 	Random rg = new Random(); 
 	List<Integer> childCircuit1 = new ArrayList<Integer>(spots.size());
 	List<Integer> childCircuit2 = new ArrayList<Integer>(spots.size());
 	int fIndex;
 	int sIndex; 
 	int crossoverOption = OPTION_OX1; //OX1 por defeito DEFINIR CONSTANTES DEPOIS
-	int mutationOption = OPTION_INSERT; //inserÁ„o por defeito DEFINIR CONSTANTES DEPOIS
+	int mutationOption = OPTION_INSERT; //inser√ß√£o por defeito DEFINIR CONSTANTES DEPOIS
 	
 	public RoverCircuit(ObservationData data) {
 		initIndividual(data);
@@ -56,7 +56,7 @@ public class RoverCircuit extends Individual {
 	@Override
 	public double fitness() {
 		
-		int time = data.getSpot(spots.get(0)).firstTime(); //tempo a que comeÁa a expediÁao
+		int time = data.getSpot(spots.get(0)).firstTime(); //tempo a que come√ßa a expedi√ßao
 		
 		for(int i = 0; i < spots.size() - 1; i++) {
 			time += data.getCost(spots.get(i), spots.get(i+1)) + data.getSpot(spots.get(i)).durationObservation(time); 
@@ -91,7 +91,7 @@ public class RoverCircuit extends Individual {
 			case 1:
 				insertMutation();
 			case 2:
-				displMutation();
+				displacementMutation();
 			case 3:
 				swapMutation();
 		}
@@ -100,14 +100,11 @@ public class RoverCircuit extends Individual {
 	private Individual[] OXCrossover1(Individual rc2) {
 		
 		secondParent = (RoverCircuit) rc2;
-		fIndex = rg.nextInt(data.getSize()/2);
-		sIndex = rg.nextInt(data.getSize()/2) + data.getSize()/2 + 1;
+		fIndex = rg.nextInt(spots.size()-1);
+		sIndex = rg.nextInt(spots.size()-fIndex) + fIndex+1;
 		boolean done = false;
-		
-		while(sIndex - fIndex <= 1) //subsequencia tem de ter pelo menos 2 pontos
-			sIndex = rg.nextInt(data.getSize()/2) + data.getSize()/2;	
-		
-		//inicializaÁao dos filhos tendo em conta a subsequencia criada
+
+		//inicializa√ßao dos filhos tendo em conta a subsequencia criada
 		for(int i = 0; i < spots.size(); i++) {
 				if(i >= fIndex && i < sIndex) {
 					childCircuit1.add(i, spots.get(i));
@@ -126,7 +123,7 @@ public class RoverCircuit extends Individual {
 				k = 0;
 			if(l == spots.size()) //aux que percorre parent 2 volta ao inicio
 				l = 0;
-			if(k == fIndex) //terminou o ciclo, j· se preencheram todas as posiÁıes
+			if(k == fIndex) //terminou o ciclo, j√° se preencheram todas as posi√ß√µes
 				done = true;
 			
 			if(childCircuit1.get(k) == -1) {
@@ -174,13 +171,10 @@ public class RoverCircuit extends Individual {
 	private Individual[] OXCrossover2(Individual rc2) {
 		
 		secondParent = (RoverCircuit) rc2;
-		int fIndex = rg.nextInt(spots.size()/2);
-		int sIndex = rg.nextInt(spots.size()) + spots.size()/2 + 1;
-			
-		while(sIndex - fIndex <= 1) //subsequencia tem de ter pelo menos 2 pontos
-			sIndex = rg.nextInt(spots.size()/2) + spots.size()/2;	
+		fIndex = rg.nextInt(spots.size()-1);
+		sIndex = rg.nextInt(spots.size()-fIndex) + fIndex+1;
 		
-		//inicializaÁao dos filhos tendo em conta a subsequencia criada
+		//inicializa√ßao dos filhos tendo em conta a subsequencia criada
 		for(int i = 0; i < spots.size(); i++) {
 			if(i >= fIndex && i < sIndex) {
 				childCircuit1.add(i, spots.get(i));
@@ -228,15 +222,15 @@ public class RoverCircuit extends Individual {
 	
 	private Individual[] PMXCrossover(Individual rc2) {
 		secondParent = (RoverCircuit) rc2;
-		fIndex = rg.nextInt(data.getSize()/2);
-		sIndex = rg.nextInt(data.getSize()/2) + data.getSize()/2 + 1;
+		fIndex = rg.nextInt(spots.size()-1);
+		sIndex = rg.nextInt(spots.size()-fIndex) + fIndex+1;
 		int[] eqMap = new int[spots.size()];
 		
 		while(sIndex - fIndex <= 1) //subsequencia tem de ter pelo menos 2 pontos
 			sIndex = rg.nextInt(spots.size()/2) + spots.size()/2;	
 	
 		
-		//inicializaÁao dos filhos tendo em conta a subsequencia criada
+		//inicializa√ßao dos filhos tendo em conta a subsequencia criada
 		for(int i = 0; i < spots.size(); i++) {
 			if(i >= fIndex && i < sIndex) {
 				childCircuit1.add(i, secondParent.spots.get(i));
@@ -353,13 +347,9 @@ public class RoverCircuit extends Individual {
 	private void reverseMutation() { //inversao
 		
 		Random rg = new Random();
-		int fIndex = rg.nextInt(data.getSize()/2);
-		int sIndex = rg.nextInt(data.getSize()/2) + data.getSize()/2 + 1;
+		fIndex = rg.nextInt(spots.size()-1);
+		sIndex = rg.nextInt(spots.size()-fIndex) + fIndex+1;
 		int tmp = 0;
-		
-		//adicionar mais verificaÁoes consoante a qualidade do individuo
-		while(sIndex - fIndex <= 1) //subsequencia tem de ter pelo menos 2 pontos
-			sIndex = rg.nextInt(data.getSize()/2) + data.getSize()/2;	
 				
 		for(int i = fIndex, j = sIndex - 1; i < j; i++, j--) {
 			tmp = spots.get(i);
@@ -368,18 +358,16 @@ public class RoverCircuit extends Individual {
 		}	
 	}
 	
-	private void insertMutation() { //inserÁao
+	private void insertMutation() { //inser√ßao
 		
 		Random rg = new Random();
-		int fIndex; //indice cujo valor vamos retirar
-		int sIndex; //indice no qual vamos colocar o valor que retiramos em fIndex
 		int tmp = 0;
 		
-		fIndex = rg.nextInt(data.getSize()-1);
-		sIndex = rg.nextInt(data.getSize()-1);
+		fIndex = rg.nextInt(data.getSize());
+		sIndex = rg.nextInt(data.getSize());
 		
 		while(fIndex == sIndex) { //gerar dois indices diferentes
-			sIndex = rg.nextInt(data.getSize()-1);
+			sIndex = rg.nextInt(data.getSize());
 		}
 				
 		if(fIndex < sIndex) {		
@@ -399,21 +387,19 @@ public class RoverCircuit extends Individual {
 	}
 	
 	private void displacementMutation() { //deslocamento
-	//fazer	
+	
 	}
 	
 	private void swapMutation() { //troca
 		
 		Random rg = new Random();		
-		int fIndex; 
-		int sIndex;
 		int tmp = 0;
 		
-		fIndex = rg.nextInt(data.getSize()-1);
-		sIndex = rg.nextInt(data.getSize()-1);
+		fIndex = rg.nextInt(data.getSize());
+		sIndex = rg.nextInt(data.getSize());
 		
 		while(fIndex == sIndex) { //gerar dois indices diferentes
-			sIndex = rg.nextInt(data.getSize()-1);
+			sIndex = rg.nextInt(data.getSize());
 		}
 		
 		tmp = spots.get(fIndex);
