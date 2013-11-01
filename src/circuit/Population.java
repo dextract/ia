@@ -1,6 +1,7 @@
 package circuit;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Collections;
 /**
@@ -8,30 +9,58 @@ import java.util.Collections;
  */
 public class Population {
 	
+	private boolean corrupt;
+	private List<Individual> pop;
+	private List<Double> acum;
+	private Individual bestInd;
+	private Individual worstInd;
+	private int size;
+	private int sumOfFitness;
+	private double worstFit;
+	private double bestFit;
+
+	
 	/**
 	 * 	Construtor relativo à classe Population
 	 */
 	
+	public Population() {
+		pop = new ArrayList<Individual>();
+		bestInd = null;
+		size = 0;
+		sumOfFitness = 0;
+	}
+	
 	/**
-	 * 	Construtor onde se especifica a popolação
+	 * 	Construtor onde se especifica a população
 	 * @param p um array de indivíduos
 	 */
 	
+	public Population(Individual[] p) {
+		
+		for(int i = 0; i < p.length; i++) {
+			 addIndividual(p[i]);
+		}
+		
+	}
+	
 	/**
 	 * Selecciona e devolve um indivíduo da população, tendo em conta a sua fitness
-	 * @return um array de indivíduos
+	 * @return um indivíduo
 	 */
 	public Individual selectIndividual() {
 		
 		// Verifica se necessita de calcular os valores de probabilidade de selecção de cada indivíduo
-		if( currupt ) {
+		if( corrupt ) {
 			double total=0.0;
 			for(int i=0; i < pop.size(); i++) {
 				total += 1/pop.get(i).fitness();
 				acum.add(total/sumOfFitness);
 			}
-			currupt = false;
+			corrupt = false;
 		}
+		
+		Random gen = new Random();
 		
 		double r = gen.nextDouble();
 		int pos = Collections.binarySearch(acum, r);
@@ -42,6 +71,7 @@ public class Population {
 			return pop.get(-(pos+1));
 		
 	}
+	
 	/**
 	 * Adiciona um indivíduo à população
 	 * @param ind, um indivíduo
@@ -61,5 +91,16 @@ public class Population {
 		}
 	}
 	
+	public Individual getBestIndividual() {		
+		return bestInd;
+	}
+	
+	public Individual getWorstIndividual() {		
+		return worstInd;
+	}
+	
+	public int getSize() {
+		return size;
+	}
 
 }

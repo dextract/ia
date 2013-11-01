@@ -26,7 +26,7 @@ public class RoverProblem extends InformedSearchProblem {
 		int gx = goal.getCoordX();
 		int gy = goal.getCoordY();
 		
-		//AnimatedSearch.draw(x, y);
+		AnimatedSearch.draw(x, y);
 	    int dx = Math.abs(x - gx);
 	    int dy = Math.abs(y - gy);
 	    
@@ -39,7 +39,7 @@ public class RoverProblem extends InformedSearchProblem {
 	 /*   if(h>maxH) maxH = h;
 	    if((dx==0)&&(dy==0))
 	    	System.out.println(maxH);*/
-	    return h1;
+	    return h1*2;
 	}
 	
 

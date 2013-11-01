@@ -18,7 +18,7 @@ public class MotionTest extends Component {
 			+"/src/motion/th.png";
 	static final int SURFACE_STEP=10;
 	static final boolean SURFACE_LEVELS=false;
-	static final boolean ANIMATE=false;
+	static final boolean ANIMATE=true;
 	
     static BufferedImage img;
     static int startx, starty, goalx,goaly;
