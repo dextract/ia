@@ -3,28 +3,29 @@ package circuit;
 import java.util.Random;
 
 /**
- * Classe que "implementa" o algoritmo genético
+ * Classe que "implementa" o algoritmo genÃ©tico
  */
 public class GeneticAlgorithm {
 
 	private static int DEFAULT_TIME = 5; //segundos
-	private static boolean elitism = true;
+	private static boolean elitism = false;
 
 	private Individual elite;
 	private Population pop;
 	private float pcrossover;
-	private float pmutate, time, startTime;
-	Random rand;
+	private float pmutate;
+	private double time, startTime;
+	Random r;
 
 	/**
 	 * Construtor
 	 * 
 	 * @param pop
-	 *            uma população
+	 *            uma populaÃ§Ã£o
 	 * @param pcrossover
 	 *            a probabilidade de crossover
 	 * @param pmutate
-	 *            a probabilidade de mutação
+	 *            a probabilidade de mutaÃ§Ã£o
 	 */
 	GeneticAlgorithm(Population pop, float pcrossover, float pmutate) {
 		this.pop = pop;
@@ -32,17 +33,18 @@ public class GeneticAlgorithm {
 		this.pmutate = pmutate;
 		elite = pop.getBestIndividual();
 		time = DEFAULT_TIME;
+		r= new Random();
 	}
 
 	/**
 	 * Construtor 2
 	 * 
 	 * @param pop
-	 *            uma população
+	 *            uma populaÃ§Ã£o
 	 * @param pcrossover
 	 *            a probabilidade de crossover
 	 * @param pmutate
-	 *            a probabilidade de mutação
+	 *            a probabilidade de mutaÃ§Ã£o
 	 * @param tempo
 	 *            limite
 	 */
@@ -55,15 +57,15 @@ public class GeneticAlgorithm {
 	}
 
 	/**
-	 * Método que pesquisa e devolve o melhor indivíduo encontrado
+	 * MÃ©todo que pesquisa e devolve o melhor indivÃ­duo encontrado
 	 * 
-	 * @return pop.getBestIndividual(), o melhor indivíduo
+	 * @return pop.getBestIndividual(), o melhor indivÃ­duo
 	 */
 	public Individual search() {
 
 		startTime = System.currentTimeMillis();
 		
-		do {
+		//do {
 			Population newPop = new Population();
 
 			// se impar individuo ia faltar no for a seguir
@@ -72,25 +74,27 @@ public class GeneticAlgorithm {
 
 			for (int i = 0; i < pop.getSize() / 2; i++) {
 
+				
 				Individual x = pop.selectIndividual();
-				Individual y = pop.selectIndividual();
+				Individual y = pop.selectIndividual();	
 				Individual[] children = new Individual[2];
-
+	
 				// crossover probability
-				if (rand.nextFloat() <= pcrossover) {
+				if (r.nextFloat() <= pcrossover) {
+					System.out.println("before cross");
 					children = x.crossover(y);
+					System.out.println("after cross");
 				}
-
 				else {
 					children[0] = x;
 					children[1] = y;
 				}
 
 				// mutation probability
-				if (rand.nextFloat() <= pmutate)
+				if (r.nextFloat() <= pmutate)
 					children[0].mutate();
 
-				if (rand.nextFloat() <= pmutate)
+				if (r.nextFloat() <= pmutate)
 					children[1].mutate();
 
 				newPop.addIndividual(children[0]); 												
@@ -110,8 +114,8 @@ public class GeneticAlgorithm {
 			}
 			
 			pop = newPop;
-	
-		} while (!done());
+			
+		//} while (!done());
 
 		return pop.getBestIndividual();
 	}
@@ -122,7 +126,7 @@ public class GeneticAlgorithm {
 	 */
 	private boolean done() {
 		
-		if(System.currentTimeMillis() - startTime > time * 1000)
+		if((System.currentTimeMillis()-startTime)/1000 >= time)
 			return true;
 		
 		return false;
