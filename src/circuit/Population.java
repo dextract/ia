@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Collections;
 /**
- * 	Classe usada para a representação de uma população.
+ * 	Classe usada para a representaÃ§Ã£o de uma populaÃ§Ã£o.
  */
 public class Population {
 	
@@ -21,36 +21,44 @@ public class Population {
 
 	
 	/**
-	 * 	Construtor relativo à classe Population
+	 * 	Construtor relativo Ã  classe Population
 	 */
 	
 	public Population() {
-		pop = new ArrayList<Individual>();
-		bestInd = null;
-		size = 0;
-		sumOfFitness = 0;
+		init();
 	}
 	
 	/**
-	 * 	Construtor onde se especifica a população
-	 * @param p um array de indivíduos
+	 * 	Construtor onde se especifica a populaÃ§Ã£o
+	 * @param p um array de indivÃ­duos
 	 */
 	
-	public Population(Individual[] p) {
-		
+	public Population(Individual[] p) {	
+		init();
 		for(int i = 0; i < p.length; i++) {
 			 addIndividual(p[i]);
-		}
-		
+		}		
+	}
+	
+	private void init() {
+		pop = new ArrayList<Individual>();
+		size = 0;
+		sumOfFitness = 0;
+		bestInd = null;
+		acum = new ArrayList<Double>();
+		bestFit = 0;
+		worstFit = 0;
+		bestInd = null;
+		worstInd = null;
 	}
 	
 	/**
-	 * Selecciona e devolve um indivíduo da população, tendo em conta a sua fitness
-	 * @return um indivíduo
+	 * Selecciona e devolve um indivÃ­duo da populaÃ§Ã£o, tendo em conta a sua fitness
+	 * @return um indivÃ­duo
 	 */
 	public Individual selectIndividual() {
 		
-		// Verifica se necessita de calcular os valores de probabilidade de selecção de cada indivíduo
+		// Verifica se necessita de calcular os valores de probabilidade de selecÃ§Ã£o de cada indivÃ­duo
 		if( corrupt ) {
 			double total=0.0;
 			for(int i=0; i < pop.size(); i++) {
@@ -58,8 +66,8 @@ public class Population {
 				acum.add(total/sumOfFitness);
 			}
 			corrupt = false;
-		}
-		
+		}	
+
 		Random gen = new Random();
 		
 		double r = gen.nextDouble();
@@ -73,22 +81,26 @@ public class Population {
 	}
 	
 	/**
-	 * Adiciona um indivíduo à população
-	 * @param ind, um indivíduo
+	 * Adiciona um indivÃ­duo Ã  populaÃ§Ã£o
+	 * @param ind, um indivÃ­duo
 	 */
 	public void addIndividual(Individual ind) {
 		size++;
 		pop.add(ind);
 		double f = ind.fitness();
 		sumOfFitness += 1/f; 
-		if( f > worstFit ) {
-			worstFit = f;
-			worstInd = ind;
-		}
 		if( f < bestFit ) {
 			bestFit = f;
 			bestInd = ind;
 		}
+		if( f > worstFit ) {
+			worstFit = f;
+			worstInd = ind;
+		}
+	}
+	
+	public int getSize() {
+		return size;
 	}
 	
 	public Individual getBestIndividual() {		
@@ -98,9 +110,4 @@ public class Population {
 	public Individual getWorstIndividual() {		
 		return worstInd;
 	}
-	
-	public int getSize() {
-		return size;
-	}
-
 }
