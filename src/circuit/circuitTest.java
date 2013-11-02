@@ -1,30 +1,47 @@
 package circuit;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-
-
+import java.io.*;
 
 public class circuitTest {
 	
-	int popSize = 50;
-	String input = "";
-	
-	
-	String file = "cincolinha.txt";
-	
-	try (InputStream in = newInputStream(file);
-	    BufferedReader reader =
-	      new BufferedReader(new InputStreamReader(in))) {
-	    String line = null;
-	    while ((line = reader.readLine()) != null) {
-	        System.out.println(line);
-	    }
-	} catch (IOException x) {
-	    System.err.println(x);
-	}
+	private static String data = "";
+	private static ObservationData obsData;
+	private static int popSize = 20;
+	private static Population pop;
+	private static GeneticAlgorithm ga;
+	private static float pMutate = (float) 0.01;
+	private static float pCrossover = (float) 0.9;
 
+	public static void main(String[] args) {	
+		
+		try{
+			  FileInputStream fstream = new FileInputStream("cincolinha.txt");
+			  DataInputStream in = new DataInputStream(fstream);
+			  BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			  String input;
+			  while ((input = br.readLine()) != null)   {
+				  data += input + '\n';
+			  }
+			  
+			  in.close();
+		}catch (Exception e){
+			  System.err.println("Erro ao abrir ficheiro.");
+		}
+		
+		//System.out.println(data);
+		obsData = new ObservationData(data);
+		initPop();
+		ga = new GeneticAlgorithm(pop, pCrossover, pMutate);
+		
+		RoverCircuit best = (RoverCircuit) ga.search();
+		
+		System.out.println(best);
+	}
+	
+	private static void initPop(){	
+		pop = new Population();
+		for(int i = 0; i < popSize; i++) {
+			pop.addIndividual(new RoverCircuit(obsData));
+		}
+	}
 }
