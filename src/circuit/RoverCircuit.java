@@ -18,8 +18,7 @@ public class RoverCircuit extends Individual {
 	//constantes para definir opçoes de mutaçao
 	public final static int OPTION_REVERSE = 0;
 	public final static int OPTION_INSERT = 1;
-	public final static int OPTION_DISPLACEMENT = 2;
-	public final static int OPTION_SWAP = 3;
+	public final static int OPTION_SWAP = 2;
 	
 	
 	private List<Integer> spots; //indices relativos aos pontos a serem visitados 
@@ -33,7 +32,7 @@ public class RoverCircuit extends Individual {
 	List<Integer> childCircuit2;
 	int fIndex;
 	int sIndex; 
-	int crossoverOption = OPTION_PMX; //OX1 por defeito 
+	int crossoverOption = OPTION_OX1; //OX1 por defeito 
 	int mutationOption = OPTION_INSERT; //inserção por defeito
 	
 	public RoverCircuit(ObservationData data) {
@@ -59,11 +58,10 @@ public class RoverCircuit extends Individual {
 		int i;
 		
 		for(i = 0; i < spots.size() - 1; i++) {
-			//System.out.println(i + " " + (i+1));
 			time += data.getCost(spots.get(i), spots.get(i+1)) + data.getSpot(spots.get(i)).durationObservation(time); 
 		}
 		
-		time+= data.getCost(spots.get(i), spots.get(0));
+		time += data.getCost(spots.get(i), spots.get(0)) + data.getSpot(0).durationObservation(time);
 		
 		return time;	
 	}
@@ -96,9 +94,6 @@ public class RoverCircuit extends Individual {
 				insertMutation();
 				break;
 			case 2:
-				displacementMutation();
-				break;
-			case 3:
 				swapMutation();
 				
 		}
@@ -124,19 +119,7 @@ public class RoverCircuit extends Individual {
 					childCircuit2.set(i, secondParent.spots.get(i));				
 				}			
 		}
-		/*
-		System.out.println(fIndex + " " + sIndex);
-		for(int i = 0; i < childCircuit1.size(); i++) {
-			System.out.print(childCircuit1.get(i) + " ");
-		}
-		System.out.println();
-		for(int i = 0; i < spots.size(); i++) {
-			System.out.print(secondParent.spots.get(i) + " ");
-		}
-		System.out.println();
-		for(int i = 0; i < spots.size(); i++) {
-			System.out.print(spots.get(i) + " ");
-		}*/
+	
 		 
 		//primeiro filho
 		for(int k = sIndex, l = k; !done;) {
@@ -153,9 +136,9 @@ public class RoverCircuit extends Individual {
 				if(!childCircuit1.contains(secondParent.spots.get(l))) {
 					childCircuit1.set(k, secondParent.spots.get(l));
 					k++;
-				}
-				
-				l++;
+				} 
+				else
+					l++; 
 			}
 			else {
 				k++;
@@ -180,10 +163,28 @@ public class RoverCircuit extends Individual {
 					childCircuit2.set(k, spots.get(l));	
 					k++;
 				}
-				l++;
+				else 
+					l++;
 			}
 			else
 				k++;			
+		}
+		
+		System.out.println(fIndex + " " + sIndex);
+		for(int i = 0; i < childCircuit1.size(); i++) {
+			System.out.print(childCircuit1.get(i) + " ");
+		}
+		System.out.println();
+		for(int i = 0; i < childCircuit2.size(); i++) {
+			System.out.print(childCircuit1.get(i) + " ");
+		}
+		System.out.println();
+		for(int i = 0; i < spots.size(); i++) {
+			System.out.print(secondParent.spots.get(i) + " ");
+		}
+		System.out.println();
+		for(int i = 0; i < spots.size(); i++) {
+			System.out.print(spots.get(i) + " ");
 		}
 		
 		children[0] = new RoverCircuit(this.data, childCircuit1);
@@ -224,7 +225,8 @@ public class RoverCircuit extends Individual {
 					childCircuit1.set(k, secondParent.spots.get(l));
 					k++;
 				}			
-				l++;
+				else 
+					l++;
 			}
 			else
 				k++;		
@@ -237,7 +239,8 @@ public class RoverCircuit extends Individual {
 					childCircuit2.set(k, spots.get(l));	
 					k++;
 				}
-				l++;
+				else 
+					l++;
 			}
 			else
 				k++;		
@@ -259,8 +262,7 @@ public class RoverCircuit extends Individual {
 		int[] eqMap = new int[spots.size()];
 		
 		//inicializaçao dos filhos tendo em conta a subsequencia criada
-		for(int i = 0; i < spots.size(); i++) {
-			
+		for(int i = 0; i < spots.size(); i++) {		
 			childCircuit1.add(i, -1);
 			childCircuit2.add(i, -1);
 			eqMap[i] = -1;
@@ -320,7 +322,7 @@ public class RoverCircuit extends Individual {
 		secondParent = (RoverCircuit) rc2;
 		int ind = 0;
 		int val = 0;
-		
+	
 		for(int i = 0; i < this.spots.size(); i++) { //inicializar filhos
 			childCircuit1.add(i, -1);
 			childCircuit2.add(i, -1);
@@ -415,10 +417,6 @@ public class RoverCircuit extends Individual {
 			}
 			spots.set(sIndex, tmp);
 		}
-	}
-	
-	private void displacementMutation() { //deslocamento
-	
 	}
 	
 	private void swapMutation() { //troca
