@@ -16,9 +16,9 @@ public class RoverCircuit extends Individual {
 	public final static int OPTION_PMX = 2;
 	public final static int OPTION_CX = 3; 
 	//constantes para definir opçoes de mutaçao
-	public final static int OPTION_REVERSE = 0; //funciona
-	public final static int OPTION_INSERT = 1; //funciona
-	public final static int OPTION_SWAP = 2; //funciona
+	public final static int OPTION_REVERSE = 0;
+	public final static int OPTION_INSERT = 1; 
+	public final static int OPTION_SWAP = 2; 
 	
 	
 	private List<Integer> spots; //indices relativos aos pontos a serem visitados 
@@ -58,7 +58,7 @@ public class RoverCircuit extends Individual {
 		int i;
 		
 		for(i = 0; i < spots.size() - 1; i++) {
-							time += data.getCost(spots.get(i), spots.get(i+1)) + data.getSpot(spots.get(i)).durationObservation(time); 
+			time += data.getCost(spots.get(i), spots.get(i+1)) + data.getSpot(spots.get(i)).durationObservation(time); 
 		}
 		
 		time += data.getCost(spots.get(i), spots.get(0)) + data.getSpot(0).durationObservation(time);
@@ -78,8 +78,7 @@ public class RoverCircuit extends Individual {
 				return PMXCrossover(other);
 			case OPTION_CX:
 				return CXCrossover(other);
-		}	
-		
+		}			
 		return null;
 	}
 
@@ -105,8 +104,13 @@ public class RoverCircuit extends Individual {
 		childCircuit2 = new ArrayList<Integer>(spots.size());
 		secondParent = (RoverCircuit) rc2;
 		fIndex = rg.nextInt(spots.size()-2);
-		sIndex = rg.nextInt(spots.size()-fIndex) + fIndex+1;
+		sIndex = rg.nextInt(spots.size()-fIndex) + 1;
 		boolean done = false;
+
+		while(fIndex - sIndex >= 1/2 * spots.size()){
+			fIndex = rg.nextInt(spots.size()-2);
+			sIndex = rg.nextInt(spots.size()-fIndex) + 1;
+		}
 		
 		//inicializaçao dos filhos tendo em conta a subsequencia criada
 		for(int i = 0; i < spots.size(); i++) {
@@ -180,8 +184,13 @@ public class RoverCircuit extends Individual {
 		childCircuit1 = new ArrayList<Integer>(spots.size());
 		childCircuit2 = new ArrayList<Integer>(spots.size());
 		secondParent = (RoverCircuit) rc2;
-		fIndex = rg.nextInt(spots.size()-1);
-		sIndex = rg.nextInt(spots.size()-fIndex) + fIndex+1;
+		fIndex = rg.nextInt(spots.size()-2);
+		sIndex = rg.nextInt(spots.size()-fIndex) + 1;
+
+		while(fIndex - sIndex >= 1/2 * spots.size()){
+			fIndex = rg.nextInt(spots.size()-2);
+			sIndex = rg.nextInt(spots.size()-fIndex) + 1;
+		}
 		
 		//inicializaçao dos filhos tendo em conta a subsequencia criada
 		for(int i = 0; i < spots.size(); i++) {
@@ -234,15 +243,23 @@ public class RoverCircuit extends Individual {
 		return children;
 	}
 	
+	
 	private Individual[] PMXCrossover(Individual rc2) {
 		
 		childCircuit1 = new ArrayList<Integer>(spots.size());
 		childCircuit2 = new ArrayList<Integer>(spots.size());
 		secondParent = (RoverCircuit) rc2;
 		int[] eqMap = new int[spots.size()];
-		fIndex = rg.nextInt(spots.size()-1);
-		sIndex = rg.nextInt(spots.size()-fIndex) + fIndex+1;
-			
+		fIndex = rg.nextInt(spots.size()-2);
+		sIndex = rg.nextInt(spots.size()-fIndex) + 1;
+
+		while(fIndex - sIndex >= 1/2 * spots.size()){
+			fIndex = rg.nextInt(spots.size()-2);
+			sIndex = rg.nextInt(spots.size()-fIndex) + 1;
+		}
+	
+		fIndex = 3; sIndex = 7;
+		
 		//inicializaçao dos filhos tendo em conta a subsequencia criada
 		for(int i = 0; i < spots.size(); i++) {
 			
@@ -250,8 +267,8 @@ public class RoverCircuit extends Individual {
 			childCircuit2.add(i, -1);	
 			
 			if(i >= fIndex && i < sIndex) {
-				childCircuit1.set(i,spots.get(i));
-				childCircuit2.set(i,secondParent.spots.get(i));
+				childCircuit1.set(i,secondParent.spots.get(i));
+				childCircuit2.set(i,spots.get(i));
 				eqMap[childCircuit2.get(i)] = childCircuit1.get(i);
 			}
 
@@ -293,7 +310,8 @@ public class RoverCircuit extends Individual {
 		secondParent = (RoverCircuit) rc2;
 		int ind = 0;
 		int val = 0;
-	
+		
+
 		for(int i = 0; i < this.spots.size(); i++) { //inicializar filhos
 			childCircuit1.add(i, -1);
 			childCircuit2.add(i, -1);
@@ -342,7 +360,6 @@ public class RoverCircuit extends Individual {
 				}			
 			}		
 		}
-		
 		
 		children[0] = new RoverCircuit(this.data, childCircuit1);
 		children[1] = new RoverCircuit(this.data, childCircuit2);
@@ -412,15 +429,6 @@ public class RoverCircuit extends Individual {
 	
 	}
 	
-	@Override
-	public Object clone() {
-		return new RoverCircuit(this.data,this.spots);
-	}
-	
-	public String toString() {
-		return spots.toString();
-	}
-	
 	public String getCrossoverType() {
 		String crossoverType = "";
 		switch(crossoverOption) {
@@ -440,5 +448,14 @@ public class RoverCircuit extends Individual {
 			case 2: mutationType="Swap"; break;
 		}
 		return mutationType;
+	}
+	
+	@Override
+	public Object clone() {
+		return new RoverCircuit(this.data,this.spots);
+	}
+	
+	public String toString() {
+		return spots.toString();
 	}
 }
