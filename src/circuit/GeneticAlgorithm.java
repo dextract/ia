@@ -149,8 +149,7 @@ public class GeneticAlgorithm {
 			
 			currGen++;
 			bestFitness.add(pop.getBestIndividual().fitness());
-		} while (currGen < cycles);
-		//} while (!done());
+		} while (!done());
 		System.out.println("Final population");
 		System.out.println(pop.toString());
 		System.out.println("---------------------------------");
@@ -167,10 +166,10 @@ public class GeneticAlgorithm {
 	 * @return booleano, acaba ou nao
 	 */
 	private boolean done() {
-		
+		if(currGen==cycles)
+			return true;
 		if((System.currentTimeMillis()-startTime)/1000 >= time)
 			return true;
-		
 		return false;
 	}
 
