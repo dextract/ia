@@ -5,6 +5,7 @@ import java.io.*;
 public class circuitTest {
 	
 	private static String data = "";
+	private static String file = "";
 	private static ObservationData obsData;
 	private static int popSize = 5;
 	private static Population pop;
@@ -21,7 +22,8 @@ public class circuitTest {
 	
 
 	public static void main(String[] args) {
-		
+		data ="";
+		file = args[0];
 		popSize = Integer.parseInt(args[1]);
 		crossOption = Integer.parseInt(args[2]);
 		pCrossover = Float.parseFloat(args[3]);
@@ -35,7 +37,7 @@ public class circuitTest {
 		
 		try{
 			
-			  FileInputStream fstream = new FileInputStream(System.getProperty("user.dir")+"/src/circuit/cincolinha.txt");
+			  FileInputStream fstream = new FileInputStream(file);
 			  DataInputStream in = new DataInputStream(fstream);
 			  BufferedReader br = new BufferedReader(new InputStreamReader(in));
 			  String input;
@@ -60,6 +62,7 @@ public class circuitTest {
 		
 		sb.append("Best: "+best+"("+best.fitness()+")"+"\n");
 		sb.append("Worst: "+worst+"("+worst.fitness()+")"+"\n");
+		sb.append("Generations: "+ga.getGen()+"\n");
 		sb.append("Execution time: "+(System.currentTimeMillis()-startTime)/1000+"s"+"\n");
 		
 		GuiCircuit.appendTextOutput(sb.toString());

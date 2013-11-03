@@ -146,12 +146,17 @@ public class GeneticAlgorithm {
 			
 			currGen++;
 			bestFitness.add(pop.getBestIndividual().fitness());
-		} while (currGen < 5000);
+		//} while (currGen < 5000);
+		} while (!done());
 		System.out.println("Final population");
 		System.out.println(pop.toString());
 		System.out.println("---------------------------------");
 
 		return new Object[] {pop.getBestIndividual(),pop.getWorstIndividual(),bestFitness};
+	}
+	
+	public int getGen() {
+		return currGen;
 	}
 	
 	/**
