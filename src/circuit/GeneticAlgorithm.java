@@ -20,6 +20,7 @@ public class GeneticAlgorithm {
 	private double time, startTime;
 	private boolean elitism;
 	private int elitismSize;
+	private int cycles;
 
 	private int currGen;
 	Random r;
@@ -39,12 +40,13 @@ public class GeneticAlgorithm {
 	 * @param mutateOption 
 	 * @param pCrossover 
 	 */
-	GeneticAlgorithm(Population pop, int popSize, float pcrossover, float pmutate, boolean elitism, int elitismSize, int executionTime) {
+	GeneticAlgorithm(Population pop, int popSize, float pcrossover, float pmutate, boolean elitism, int elitismSize, int executionTime, int cycles) {
 		this.pop = pop;
 		this.pcrossover = pcrossover;
 		this.pmutate = pmutate;
 		this.popSize = popSize;
 		this.elitism = elitism;
+		this.cycles = cycles;
 		currGen = 0;
 		this.elitismSize = elitismSize;
 		elite = pop.getBestIndividual();
@@ -65,13 +67,14 @@ public class GeneticAlgorithm {
 	 * @param tempo
 	 *            limite
 	 */
-	GeneticAlgorithm(Population pop, float pcrossover, float pmutate, int time) {
+	GeneticAlgorithm(Population pop, float pcrossover, float pmutate, int time, int cycles) {
 		this.pop = pop;
 		this.pcrossover = pcrossover;
 		this.pmutate = pmutate;
 		currGen = 0;
 		elite = pop.getBestIndividual();
 		this.time = time;
+		this.cycles = cycles;
 	}
 
 	/**
@@ -146,8 +149,8 @@ public class GeneticAlgorithm {
 			
 			currGen++;
 			bestFitness.add(pop.getBestIndividual().fitness());
-		//} while (currGen < 5000);
-		} while (!done());
+		} while (currGen < cycles);
+		//} while (!done());
 		System.out.println("Final population");
 		System.out.println(pop.toString());
 		System.out.println("---------------------------------");

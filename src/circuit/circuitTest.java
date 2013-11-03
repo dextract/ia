@@ -19,6 +19,7 @@ public class circuitTest {
 	private static int elitismSize = 0;
 	private static boolean graph = false;
 	private static int executionTime = 0;
+	private static int cycles;
 	
 
 	public static void main(String[] args) {
@@ -33,7 +34,7 @@ public class circuitTest {
 		elitismSize = Integer.parseInt(args[7]);
 		graph = Boolean.valueOf(args[8]);
 		executionTime = Integer.parseInt(args[9]);
-
+		cycles = Integer.parseInt(args[10]);
 		
 		try{
 			
@@ -52,7 +53,7 @@ public class circuitTest {
 		
 		obsData = new ObservationData(data);
 		initPop();
-		ga = new GeneticAlgorithm(pop, popSize, pCrossover, pMutate, elitism, elitismSize, executionTime);
+		ga = new GeneticAlgorithm(pop, popSize, pCrossover, pMutate, elitism, elitismSize, executionTime, cycles);
 		double startTime = System.currentTimeMillis();
 		Object[] output = ga.search();
 		RoverCircuit best = (RoverCircuit) output[0];

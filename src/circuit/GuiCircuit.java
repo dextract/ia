@@ -54,6 +54,8 @@ public class GuiCircuit extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
+        jLabel7 = new javax.swing.JLabel();
+        cycles = new javax.swing.JTextField();
     	jFileChooser1 = new javax.swing.JFileChooser();
         runButton = new javax.swing.JButton();
         crossoverOption = new javax.swing.JComboBox();
@@ -137,7 +139,13 @@ public class GuiCircuit extends javax.swing.JFrame {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 browseButtonActionPerformed(evt);
             }
+            
+
         });
+        
+        jLabel7.setText("Cicles");
+
+        cycles.setText("10");
         
         
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
@@ -149,8 +157,12 @@ public class GuiCircuit extends javax.swing.JFrame {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(outputField)
                     .add(layout.createSequentialGroup()
-                        .add(graphCheck, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
+                        .add(graphCheck, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 71, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jLabel7)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(cycles)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(jLabel5)
                         .add(39, 39, 39)
                         .add(executionTime, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 43, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
@@ -164,7 +176,7 @@ public class GuiCircuit extends javax.swing.JFrame {
                                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                                     .add(layout.createSequentialGroup()
                                         .add(crossoverOption, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 116, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                        .add(0, 0, Short.MAX_VALUE))
+                                        .add(0, 11, Short.MAX_VALUE))
                                     .add(mutationOption, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                                 .add(elitismCheck)
@@ -182,7 +194,7 @@ public class GuiCircuit extends javax.swing.JFrame {
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(populationSize)
-                            .add(mutationProb)
+                            .add(mutationProb, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
                             .add(crossoverProb)))
                     .add(layout.createSequentialGroup()
                         .add(jLabel6)
@@ -225,7 +237,9 @@ public class GuiCircuit extends javax.swing.JFrame {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel5)
                     .add(executionTime, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(graphCheck))
+                    .add(graphCheck)
+                    .add(jLabel7)
+                    .add(cycles, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .add(18, 18, 18)
                 .add(runButton)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
@@ -234,12 +248,12 @@ public class GuiCircuit extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>                        
+    }// </editor-fold>                                 
  
 
     private void runButtonActionPerformed(java.awt.event.ActionEvent evt) { 
     	outputField.setText("");
-    	String[] args = new String[10];
+    	String[] args = new String[11];
     	args[0] = file.toString();
     	args[1] = populationSize.getText();
     	args[2] = String.valueOf(crossoverOption.getSelectedIndex());
@@ -250,6 +264,7 @@ public class GuiCircuit extends javax.swing.JFrame {
     	args[7] = elitismSize.getText();
     	args[8] = Boolean.toString(graphCheck.isSelected());
     	args[9] = String.valueOf(executionTime.getText());
+    	args[10] = String.valueOf(cycles.getText());
         circuitTest.main(args);
     }                       
     
@@ -312,6 +327,7 @@ public class GuiCircuit extends javax.swing.JFrame {
     private javax.swing.JTextField elitismSize;
     private javax.swing.JTextField executionTime;
     private javax.swing.JTextField filePath;
+    private javax.swing.JTextField cycles;
     private javax.swing.JCheckBox graphCheck;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
@@ -322,6 +338,7 @@ public class GuiCircuit extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JComboBox mutationOption;
     private javax.swing.JTextField mutationProb;
     private static JTextArea outputField;
