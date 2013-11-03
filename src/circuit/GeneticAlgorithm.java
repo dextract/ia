@@ -10,7 +10,7 @@ import java.util.Random;
 public class GeneticAlgorithm {
 
 	private static int DEFAULT_TIME = 5; //segundos
-	private static boolean elitism = false;
+	private static boolean elitism = true;
 	private static int defaultSize;
 
 	private Individual elite;
@@ -18,6 +18,7 @@ public class GeneticAlgorithm {
 	private float pcrossover;
 	private float pmutate;
 	private double time, startTime;
+	private int currGen;
 	Random r;
 
 	/**
@@ -34,6 +35,7 @@ public class GeneticAlgorithm {
 		this.pop = pop;
 		this.pcrossover = pcrossover;
 		this.pmutate = pmutate;
+		currGen = 0;
 		elite = pop.getBestIndividual();
 		time = DEFAULT_TIME;
 		defaultSize = pop.getSize()/2;
@@ -56,6 +58,7 @@ public class GeneticAlgorithm {
 		this.pop = pop;
 		this.pcrossover = pcrossover;
 		this.pmutate = pmutate;
+		currGen = 0;
 		elite = pop.getBestIndividual();
 		this.time = time;
 	}
@@ -114,26 +117,27 @@ public class GeneticAlgorithm {
 				newPop.addIndividual(children[0]); 												
 				newPop.addIndividual(children[1]);
 			}	
+			
 			pop = newPop;
+			
 			if(worstTmp!=null)
 				pop.addIndividual(worstTmp);
-			
 			
 			// Elitismo
 			if (elitism) {
 
-				if (elite.fitness() > pop.getBestIndividual().fitness()) {
-					// REMOVER PIOR E METER ELITE, PORQUE ASSIM VAI ADICIONANDO 1 A CADA GERACAO
-					pop.addIndividual(elite);
+				if (elite.fitness() < pop.getBestIndividual().fitness()) { //se o elite da geraçao anterior continuar a ser melhor que todos
+					pop.addIndividual(elite); //adiciona-se o elite da geraçao anterior
+					pop.removeIndividual(pop.getWorstIndividual()); //remove-se o pior de geraçao corrente para equilibrar o tamanho da pop
 				}
-
 				else
-					elite = pop.getBestIndividual();
+					elite = pop.getBestIndividual(); //o elite deixa de ser o da geração anterior
 			}
 			
-			
-		bestFitness.add(pop.getBestIndividual().fitness());
-		} while (!done());
+			currGen++;
+			bestFitness.add(pop.getBestIndividual().fitness());
+		} while (currGen < 5000);
+		
 		System.out.println("Final population");
 		System.out.println(pop.toString());
 		System.out.println("---------------------------------");
