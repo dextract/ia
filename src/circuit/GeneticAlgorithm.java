@@ -1,5 +1,7 @@
 package circuit;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -9,6 +11,7 @@ public class GeneticAlgorithm {
 
 	private static int DEFAULT_TIME = 5; //segundos
 	private static boolean elitism = false;
+	private static int defaultSize;
 
 	private Individual elite;
 	private Population pop;
@@ -33,6 +36,7 @@ public class GeneticAlgorithm {
 		this.pmutate = pmutate;
 		elite = pop.getBestIndividual();
 		time = DEFAULT_TIME;
+		defaultSize = pop.getSize()/2;
 		r= new Random();
 	}
 
@@ -61,33 +65,43 @@ public class GeneticAlgorithm {
 	 * 
 	 * @return pop.getBestIndividual(), o melhor indivíduo
 	 */
-	public Individual search() {
-
-		startTime = System.currentTimeMillis();
+	public Object[] search() {
 		
-		//do {
+		List<Double> bestFitness = new ArrayList<Double>();
+		
+		System.out.println("Crossover: "+pcrossover*100+"%");
+		System.out.println("Mutation: "+pmutate*100+"%");
+		System.out.println("Elitism: "+elitism);
+		System.out.println("---------------------------------");
+		System.out.println("Initial population");
+		System.out.println(pop.toString());
+		
+		startTime = System.currentTimeMillis();
+		do {
+			Individual worstTmp = null;
 			Population newPop = new Population();
-
 			// se impar individuo ia faltar no for a seguir
-			if (pop.getSize() % 2 != 0)
-				newPop.addIndividual(pop.selectIndividual());
-
-			for (int i = 0; i < pop.getSize() / 2; i++) {
-
-				
+			if (pop.getSize() % 2 != 0) {
+				worstTmp =  pop.getWorstIndividual();
+				pop.removeIndividual(worstTmp);
+			}
+			
+			for (int i = 0; i < defaultSize; i++) {
 				Individual x = pop.selectIndividual();
+				pop.removeIndividual(x);
 				Individual y = pop.selectIndividual();	
+				pop.removeIndividual(y);
 				Individual[] children = new Individual[2];
 	
 				// crossover probability
 				if (r.nextFloat() <= pcrossover) {
-					System.out.println("before cross");
+					//System.out.println("before cross");
 					children = x.crossover(y);
-					System.out.println("after cross");
+					//System.out.println("after cross");
 				}
 				else {
 					children[0] = x;
-					children[1] = y;
+					if (pop.getSize() % 2 == 0)children[1] = y;
 				}
 
 				// mutation probability
@@ -99,25 +113,32 @@ public class GeneticAlgorithm {
 
 				newPop.addIndividual(children[0]); 												
 				newPop.addIndividual(children[1]);
-			}
-
+			}	
+			pop = newPop;
+			if(worstTmp!=null)
+				pop.addIndividual(worstTmp);
+			
+			
 			// Elitismo
 			if (elitism) {
 
-				if (elite.fitness() > newPop.getBestIndividual().fitness()) {
+				if (elite.fitness() > pop.getBestIndividual().fitness()) {
 					// REMOVER PIOR E METER ELITE, PORQUE ASSIM VAI ADICIONANDO 1 A CADA GERACAO
-					newPop.addIndividual(elite);
+					pop.addIndividual(elite);
 				}
 
 				else
-					elite = newPop.getBestIndividual();
+					elite = pop.getBestIndividual();
 			}
 			
-			pop = newPop;
 			
-		//} while (!done());
+		bestFitness.add(pop.getBestIndividual().fitness());
+		} while (!done());
+		System.out.println("Final population");
+		System.out.println(pop.toString());
+		System.out.println("---------------------------------");
 
-		return pop.getBestIndividual();
+		return new Object[] {pop.getBestIndividual(),pop.getWorstIndividual(),bestFitness};
 	}
 	
 	/**

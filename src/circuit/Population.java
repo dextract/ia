@@ -79,6 +79,32 @@ public class Population {
 			return pop.get(-(pos+1));
 		
 	}
+
+	public void removeIndividual(Individual ind) {
+		size--;
+		pop.remove(ind);
+		double f = ind.fitness();
+		sumOfFitness -= 1/f;
+		if(f==bestFit) {
+			bestFit=worstFit;
+			for(Individual i : pop) {
+				if(i.fitness()<=bestFit) {
+					bestFit = i.fitness();
+					bestInd = i;
+				}
+			}
+		}
+		if(f==worstFit) {
+			worstFit=bestFit;
+			for(Individual i : pop) {
+				if(i.fitness()>=worstFit) {
+					worstFit = i.fitness();
+					worstInd = i;
+				}
+			}
+		}
+	}
+	
 	
 	/**
 	 * Adiciona um indivíduo à população
@@ -89,14 +115,20 @@ public class Population {
 		pop.add(ind);
 		double f = ind.fitness();
 		sumOfFitness += 1/f; 
-		if( f < bestFit ) {
-			bestFit = f;
+		if(size == 1) {
+			bestFit = worstFit = f;
 			bestInd = ind;
-		}
-		if( f > worstFit ) {
-			worstFit = f;
 			worstInd = ind;
 		}
+		else
+			if( f < bestFit ) {
+				bestFit = f;
+				bestInd = ind;
+			}
+			if( f > worstFit ) {
+				worstFit = f;
+				worstInd = ind;
+			}
 	}
 	
 	public int getSize() {
@@ -110,4 +142,15 @@ public class Population {
 	public Individual getWorstIndividual() {		
 		return worstInd;
 	}
+	
+	public String toString() {
+		String s = "";
+	  
+		for(Individual i: pop) {
+			s += i.toString() + " | Fitness: " + i.fitness() + "\n";
+		}
+	  
+		return s;
+	}
+	
 }

@@ -6,7 +6,7 @@ public class circuitTest {
 	
 	private static String data = "";
 	private static ObservationData obsData;
-	private static int popSize = 20;
+	private static int popSize = 5;
 	private static Population pop;
 	private static GeneticAlgorithm ga;
 	private static float pMutate = (float) 0.01;
@@ -15,7 +15,8 @@ public class circuitTest {
 	public static void main(String[] args) {	
 		
 		try{
-			  FileInputStream fstream = new FileInputStream("cincolinha.txt");
+			
+			  FileInputStream fstream = new FileInputStream(System.getProperty("user.dir")+"/src/circuit/cincolinha.txt");
 			  DataInputStream in = new DataInputStream(fstream);
 			  BufferedReader br = new BufferedReader(new InputStreamReader(in));
 			  String input;
@@ -28,14 +29,23 @@ public class circuitTest {
 			  System.err.println("Erro ao abrir ficheiro.");
 		}
 		
-		//System.out.println(data);
 		obsData = new ObservationData(data);
 		initPop();
 		ga = new GeneticAlgorithm(pop, pCrossover, pMutate);
 		
-		RoverCircuit best = (RoverCircuit) ga.search();
+		double startTime = System.currentTimeMillis();
+		Object[] output = ga.search();
 		
-		System.out.println(best);
+		RoverCircuit best = (RoverCircuit) output[0];
+		RoverCircuit worst = (RoverCircuit) output[1];
+		
+		System.out.println("Crossover: "+best.getCrossoverType());
+		System.out.println("Mutation: "+best.getMutationType());
+		System.out.println("Best: "+best+"("+best.fitness()+")");
+		System.out.println("Worst: "+worst+"("+worst.fitness()+")");
+		System.out.println("Execution time: "+(System.currentTimeMillis()-startTime)/1000+"s");
+		
+		
 	}
 	
 	private static void initPop(){	
@@ -44,4 +54,6 @@ public class circuitTest {
 			pop.addIndividual(new RoverCircuit(obsData));
 		}
 	}
+	
+	
 }
