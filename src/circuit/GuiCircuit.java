@@ -31,15 +31,17 @@
 package circuit;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 
 import javax.swing.JFileChooser;
 import javax.swing.JTextArea;
 
 public class GuiCircuit extends javax.swing.JFrame {
     
-    /** Creates new form GuiCircuit */
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/** Creates new form GuiCircuit */
     public GuiCircuit() {
         initComponents();
     }
@@ -67,9 +69,7 @@ public class GuiCircuit extends javax.swing.JFrame {
         crossoverProb = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        stopButton = new javax.swing.JButton();
         outputField = new javax.swing.JTextArea();
-        sp = new javax.swing.JScrollPane(outputField);
         outputField.setLineWrap(true);
         outputField.setWrapStyleWord(true);
         jLabel5 = new javax.swing.JLabel();
@@ -117,12 +117,12 @@ public class GuiCircuit extends javax.swing.JFrame {
 
         jLabel4.setText("Crossover probability");
 
-        stopButton.setText("Stop");
-        stopButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                stopButtonActionPerformed(evt);
-            }
-        });
+      //  stopButton.setText("Stop");
+       // stopButton.addActionListener(new java.awt.event.ActionListener() {
+       //     public void actionPerformed(java.awt.event.ActionEvent evt) {
+       //         stopButtonActionPerformed(evt);
+       //     }
+       // });
         
         jLabel5.setText("Execution time (s)");
 
@@ -140,7 +140,6 @@ public class GuiCircuit extends javax.swing.JFrame {
         });
         
         
-
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -150,16 +149,11 @@ public class GuiCircuit extends javax.swing.JFrame {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(outputField)
                     .add(layout.createSequentialGroup()
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(org.jdesktop.layout.GroupLayout.TRAILING, runButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .add(graphCheck, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE))
+                        .add(graphCheck, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                            .add(layout.createSequentialGroup()
-                                .add(jLabel5)
-                                .add(39, 39, 39)
-                                .add(executionTime))
-                            .add(stopButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 207, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                        .add(jLabel5)
+                        .add(39, 39, 39)
+                        .add(executionTime, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 43, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(layout.createSequentialGroup()
@@ -196,7 +190,8 @@ public class GuiCircuit extends javax.swing.JFrame {
                         .add(filePath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 311, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(browseButton)
-                        .add(0, 0, Short.MAX_VALUE)))
+                        .add(0, 0, Short.MAX_VALUE))
+                    .add(runButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -232,16 +227,15 @@ public class GuiCircuit extends javax.swing.JFrame {
                     .add(executionTime, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(graphCheck))
                 .add(18, 18, 18)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(runButton)
-                    .add(stopButton))
+                .add(runButton)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(outputField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
-    }// </editor-fold>                             
+    }// </editor-fold>                        
+ 
 
     private void runButtonActionPerformed(java.awt.event.ActionEvent evt) { 
     	outputField.setText("");
@@ -263,10 +257,6 @@ public class GuiCircuit extends javax.swing.JFrame {
     	outputField.append(output);
     }
 
-    private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
-    }                               
-    
     private void browseButtonActionPerformed(java.awt.event.ActionEvent evt) {   
     	file = null;
         int returnVal = jFileChooser1.showOpenDialog(this);
@@ -337,8 +327,6 @@ public class GuiCircuit extends javax.swing.JFrame {
     private static JTextArea outputField;
     private javax.swing.JTextField populationSize;
     private javax.swing.JButton runButton;
-    private javax.swing.JButton stopButton;
-    private javax.swing.JScrollPane sp;
     // End of variables declaration                   
     
 }
