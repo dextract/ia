@@ -9,6 +9,7 @@ import java.util.Random;
  */
 public class GeneticAlgorithm {
 
+
 	private static int defaultSize;
 	
 	private Individual elite;
@@ -19,6 +20,7 @@ public class GeneticAlgorithm {
 	private double time, startTime;
 	private boolean elitism;
 	private int elitismSize;
+
 	private int currGen;
 	Random r;
 
@@ -125,10 +127,11 @@ public class GeneticAlgorithm {
 				newPop.addIndividual(children[0]); 												
 				newPop.addIndividual(children[1]);
 			}	
+			
 			pop = newPop;
+			
 			if(worstTmp!=null)
 				pop.addIndividual(worstTmp);
-			
 			
 			// Elitismo
 			if (elitism) {
@@ -137,11 +140,9 @@ public class GeneticAlgorithm {
 					pop.addIndividual(elite); //adiciona-se o elite da geraçao anterior
 					pop.removeIndividual(pop.getWorstIndividual()); //remove-se o pior de geraçao corrente para equilibrar o tamanho da pop
 				}
-
 				else
-					elite = pop.getBestIndividual();
+					elite = pop.getBestIndividual(); //o elite deixa de ser o da geração anterior
 			}
-			
 			
 			currGen++;
 			bestFitness.add(pop.getBestIndividual().fitness());
