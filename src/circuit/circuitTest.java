@@ -11,8 +11,27 @@ public class circuitTest {
 	private static GeneticAlgorithm ga;
 	private static float pMutate = (float) 0.01;
 	private static float pCrossover = (float) 0.9;
+	
+	private static int crossOption = 0;
+	private static int mutateOption = 0;
+	private static boolean elitism = false;
+	private static int elitismSize = 0;
+	private static boolean graph = false;
+	private static int executionTime = 0;
+	
 
-	public static void main(String[] args) {	
+	public static void main(String[] args) {
+		
+		popSize = Integer.parseInt(args[1]);
+		crossOption = Integer.parseInt(args[2]);
+		pCrossover = Float.parseFloat(args[3]);
+		mutateOption = Integer.parseInt(args[4]);
+		pMutate = Float.parseFloat(args[5]);
+		elitism = Boolean.valueOf(args[6]);
+		elitismSize = Integer.parseInt(args[7]);
+		graph = Boolean.valueOf(args[8]);
+		executionTime = Integer.parseInt(args[9]);
+
 		
 		try{
 			
@@ -31,27 +50,26 @@ public class circuitTest {
 		
 		obsData = new ObservationData(data);
 		initPop();
-		ga = new GeneticAlgorithm(pop, pCrossover, pMutate);
-		
+		ga = new GeneticAlgorithm(pop, popSize, pCrossover, pMutate, elitism, elitismSize, executionTime);
 		double startTime = System.currentTimeMillis();
 		Object[] output = ga.search();
-		
 		RoverCircuit best = (RoverCircuit) output[0];
 		RoverCircuit worst = (RoverCircuit) output[1];
 		
-		System.out.println("Crossover: "+best.getCrossoverType());
-		System.out.println("Mutation: "+best.getMutationType());
-		System.out.println("Best: "+best+"("+best.fitness()+")");
-		System.out.println("Worst: "+worst+"("+worst.fitness()+")");
-		System.out.println("Execution time: "+(System.currentTimeMillis()-startTime)/1000+"s");
+		StringBuilder sb = new StringBuilder();
 		
+		sb.append("Best: "+best+"("+best.fitness()+")"+"\n");
+		sb.append("Worst: "+worst+"("+worst.fitness()+")"+"\n");
+		sb.append("Execution time: "+(System.currentTimeMillis()-startTime)/1000+"s"+"\n");
+		
+		GuiCircuit.appendTextOutput(sb.toString());
 		
 	}
 	
 	private static void initPop(){	
 		pop = new Population();
 		for(int i = 0; i < popSize; i++) {
-			pop.addIndividual(new RoverCircuit(obsData));
+			pop.addIndividual(new RoverCircuit(obsData, crossOption, mutateOption));
 		}
 	}
 	

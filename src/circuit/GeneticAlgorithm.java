@@ -9,15 +9,17 @@ import java.util.Random;
  */
 public class GeneticAlgorithm {
 
-	private static int DEFAULT_TIME = 5; //segundos
-	private static boolean elitism = false;
 	private static int defaultSize;
-
+	
 	private Individual elite;
 	private Population pop;
+	private int popSize;
 	private float pcrossover;
 	private float pmutate;
 	private double time, startTime;
+	private boolean elitism;
+	private int elitismSize;
+	private int currGen;
 	Random r;
 
 	/**
@@ -29,13 +31,22 @@ public class GeneticAlgorithm {
 	 *            a probabilidade de crossover
 	 * @param pmutate
 	 *            a probabilidade de mutação
+	 * @param elitismSize 
+	 * @param elitism 
+	 * @param pMutate 
+	 * @param mutateOption 
+	 * @param pCrossover 
 	 */
-	GeneticAlgorithm(Population pop, float pcrossover, float pmutate) {
+	GeneticAlgorithm(Population pop, int popSize, float pcrossover, float pmutate, boolean elitism, int elitismSize, int executionTime) {
 		this.pop = pop;
 		this.pcrossover = pcrossover;
 		this.pmutate = pmutate;
+		this.popSize = popSize;
+		this.elitism = elitism;
+		currGen = 0;
+		this.elitismSize = elitismSize;
 		elite = pop.getBestIndividual();
-		time = DEFAULT_TIME;
+		time = executionTime;
 		defaultSize = pop.getSize()/2;
 		r= new Random();
 	}
@@ -56,6 +67,7 @@ public class GeneticAlgorithm {
 		this.pop = pop;
 		this.pcrossover = pcrossover;
 		this.pmutate = pmutate;
+		currGen = 0;
 		elite = pop.getBestIndividual();
 		this.time = time;
 	}
@@ -85,7 +97,6 @@ public class GeneticAlgorithm {
 				worstTmp =  pop.getWorstIndividual();
 				pop.removeIndividual(worstTmp);
 			}
-			
 			for (int i = 0; i < defaultSize; i++) {
 				Individual x = pop.selectIndividual();
 				pop.removeIndividual(x);
@@ -122,9 +133,9 @@ public class GeneticAlgorithm {
 			// Elitismo
 			if (elitism) {
 
-				if (elite.fitness() > pop.getBestIndividual().fitness()) {
-					// REMOVER PIOR E METER ELITE, PORQUE ASSIM VAI ADICIONANDO 1 A CADA GERACAO
-					pop.addIndividual(elite);
+				if (elite.fitness() < pop.getBestIndividual().fitness()) { //se o elite da geraçao anterior continuar a ser melhor que todos
+					pop.addIndividual(elite); //adiciona-se o elite da geraçao anterior
+					pop.removeIndividual(pop.getWorstIndividual()); //remove-se o pior de geraçao corrente para equilibrar o tamanho da pop
 				}
 
 				else
@@ -132,8 +143,9 @@ public class GeneticAlgorithm {
 			}
 			
 			
-		bestFitness.add(pop.getBestIndividual().fitness());
-		} while (!done());
+			currGen++;
+			bestFitness.add(pop.getBestIndividual().fitness());
+		} while (currGen < 5000);
 		System.out.println("Final population");
 		System.out.println(pop.toString());
 		System.out.println("---------------------------------");
