@@ -1,56 +1,86 @@
-% Estados:
--
-% Localizacao_robot(S1, S2, S3); Localizacao_objecto(B, S); Agarra([], B1, B2, B3);  Existe_porta(S1, S2);
-
-% Funcao sucessor:
-
-accao(nome : andar(S,SN),
-condicoes  : [Localizacao_robot(S),Existe_porta(S,SN)],
-efeitos    : [Localizacao_robot(SN),-Localizacao_robot(S)],
-restricoes : []).
-
-accao(nome : agarrar(S,B),
-condicoes  : [Localizacao_robot(S),Agarra([]),Localizacao_objecto(B,S)],
-efeitos    : [Agarra(B),-Localizacao_objecto(B,S)],
-restricoes : []).
-
-accao(nome : largar(S,B),
-condicoes  : [Agarra(B),Localizacao_robot(S)],
-efeitos    : [-Agarra(B),Localizacao_objecto(B,S)],
-restricoes : []).
-
-
-% Estado inicial:
-
-inicial([Localizacao_robot(S1),Localizacao_objecto(B1,S1),Localizacao_objecto(B2,S2),Localizacao_objecto(B3,S3),Agarrar([]),Existe_porta(S1,S2),Existe_porta(S2,S3)]).
+%Estados:
+%localizacao_robot(s1, s2, s3); localizacao_objecto([b, s]); agarra([], b1, b2, b3);  existe_porta([s1, s2]);
+%
+%accao(nome : andar(S,SN),
+%condicoes  : [localizacao_robot(S),existe_porta(S,SN)],
+%efeitos    : [localizacao_robot(SN),-localizacao_robot(S)],
+%restricoes : []).
+%
+%accao(nome : agarrar(S,B),
+%condicoes  : [localizacao_robot(S),agarra([]),localizacao_objecto(B,S)],
+%efeitos    : [agarra(B),-localizacao_objecto(B,S)],
+%restricoes : []).
+%
+%accao(nome : largar(S,B),
+%condicoes  : [agarra(B),localizacao_robot(S)],
+%efeitos    : [-agarra(B),localizacao_objecto(B,S)],
+%restricoes : []).
+%
+%inicial([localizacao_robot(s1),localizacao_objecto(b1,s1),localizacao_objecto(b2,s2),localizacao_objecto(b3,s3),agarra([]),existe_porta(s1,s2),existe_porta(s2,s3)]).
+%
+%objectivos([localizacao_objecto(b1,s3),localizacao_objecto(b2,s3),localizacao_objecto(b3,s3)]).
 
 
-% Teste objectivo:
+accao(nome : calcarSap(Pe), 
 
-objectivos([Localizacao_objecto(B1,S3),Localizacao_objecto(B2,S3),Localizacao_objecto(B3,S3)]).
+ condicoes : [meia(Pe)], 
 
+   efeitos : [sapato(Pe)], 
 
+restricoes : []). 
 
-Plan = [agarrar(s1, b1),andar(s1, s2),andar(s2,s3),largar(s3,b1),andar(s3,s2),agarrar(s2,b2),andar(s2,s3),largar(s3,b2)]
+ 
 
+accao(nome : calcarMeia(Pe),
 
-procCond(C|LC,S) :- member(C,S), procCond(LC,S).
+ condicoes : [],
+
+   efeitos : [meia(Pe)],
+
+restricoes : []). 
+
+ 
+
+inicial([]). 
+
+ 
+objectivos([sapato(esq),sapato(dir)]).
+
+%[calcarMeia(dir),calcarSap(dir),calcarMeia(esq),calcarSap(esq)]
+
+append([], X, X).
+append([X | Y], Z, [X | W]) :- append(Y, Z, W).
+
+procCond([],_).
+procCond([C|LC],S) :- member(C,S), procCond(LC,S).
 
 procEfeitos([],S,S).
-procEfeitos([-E|LE],S,S1) :- !, delete(S,E,S1), procEfeitos(LE,S1,S2).
-procEfeitos(E|LE,S,S1) :- append([E],S,S1), procEfeitos(LE,S1,S2).
-	
-procRestr([],S) :- true.
+procEfeitos([-E|LE],S,S2) :- delete(S,E,S1), procEfeitos(LE,S1,S2).
+procEfeitos([E|LE],S,S2) :- append([E],S,S1), procEfeitos(LE,S1,S2).
 
-testPlan([A|LA],I,Exec,Fn) :-
-	accao(nome : A, condicoes : LC, efeitos : LE, restricoes : LR), procCond(LC,I), procEfeitos(LE,I,I1), procRestr(LR,I),
-	testPlan(LA,I1,Exec,Fn).
+procRestr(_,_).
 
+procObjectivos([],_).
+procObjectivos([O|LO],Fn) :- member(O,Fn), procObjectivos(LO,Fn).
+
+satisfiedGoal(Fn) :- objectivos(Ob), procObjectivos(Ob, Fn).
+
+updateExec([],[]).
+updateExec([E|LE],El,[E1|LE1]) :- append(Exec,[El],Exec1).
+
+
+testPlan([],I,Exec2,I).
+testPlan([A|LA],I,Exec,Fn) :- accao(nome : A, condicoes : LC, efeitos : LE, restricoes : LR), append(Exec,[A],Exec1), procCond(LC,I), procEfeitos(LE,I,I1), append(Exec1,[I1],Exec2), procRestr(LR,I), testPlan(LA,I1,Exec2,Fn).
+
+
+writeExec([]) :- objectivos(O), write('\nGoal '), write(O), write(' satisfied').
+writeExec([E|LE]) :- write('\n'), write(E), writeExec(LE).
 
 planExecute(P) :- testPlan(P,E), writeExec(E).
+
 testPlan(Plan,[I|Exec]) :-
-   inicial(I),                  % I = situação inicial  
-   testPlan(Plan,I,Exec,Fn),    % Testa o plano linear Plan e executa-o a partir da                                   
-                                % situação inicial I e devolve o resultado da execução em Exec
-                                % A situação final da execução é devolvida em Fn.       
-   satisfiedGoal(Fn).           % Verifica se os predicados do objectivo estão presentes em Fn.   
+   inicial(I),                   % I = situação inicial  
+   testPlan(Plan,I,Exec,Fn),     % Testa o plano linear Plan e executa-o a partir da                                   
+				 % situação inicial I e devolve o resultado da execução em Exec
+				 % A situação final da execução é devolvida em Fn.       
+   satisfiedGoal(Fn).            % Verifica se os predicados do objectivo estão presentes em Fn.   
